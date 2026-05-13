@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { motion, AnimatePresence } from "framer-motion"
 
 export default function App() {
   const [result, setResult] = useState(null)
@@ -13,7 +14,7 @@ export default function App() {
     const formData = new FormData()
     formData.append("resume", file)
     formData.append("role", role)
-
+    setResult(null)
     setLoading(true)
 
     try {
@@ -35,7 +36,7 @@ export default function App() {
   return (
     <div className="min-h-screen bg-gray-200 p-8">
 
-      <div className="max-w-4xl mx-auto bg-white p-8 rounded-xl shadow">
+      <div className="max-w-4xl mx-auto bg-white p-8 rounded-xl shadow min-h-screen">
 
         <h1 className="text-3xl text-center mb-4">
           FleetHire AI ATS Dashboard
@@ -60,8 +61,8 @@ export default function App() {
           type="file"
           accept="application/pdf"
           onChange={(e) => setFile(e.target.files[0])}
-          className="mb-4 border border-gray-400 p-2"
-        />
+          className="mb-4 p-2 border border-gray-400 rounded w-full overflow-hidden text-sm"
+          />
         <div>
           <button
             onClick={handleSubmit}
@@ -72,9 +73,15 @@ export default function App() {
         </div>
 
 
-
+        <AnimatePresence>
         {result && (
-          <div className="mt-6">
+          <motion.div
+          initial={{ opacity: 0, y: 40, scale: 0.98 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: 20 }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
+          className="mt-6"
+        >
 
             <div className="p-4 bg-gray-50 rounded-lg">
               <h1 className="text-3xl text-center font-semibold text-blue-600">Analysis Results</h1>
@@ -144,8 +151,9 @@ export default function App() {
               </h2>
           </div>
 
-        </div>
+          </motion.div>
       )}
+      </AnimatePresence>
     </div>
   </div>
 )}
